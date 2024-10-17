@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "user-crud.fullname" . }}-ss-db
+spec:
+  serviceName: {{ .Values.db.service.name }}
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "user-crud.fullname" . }}-ss-db
+  template:
+    metadata:
+      labels:
+        app: {{ include "user-crud.fullname" . }}-ss-db
+    spec:
+      containers:
+        - name: postgres
+          image: {{ include "user-crud.db.image" . }}
+          ports:
+            - containerPort: {{ .Values.db.container.port }}
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.name }}
+                  key: db_name
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.name }}
+                  key: db_username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.name }}
+                  key: db_password
+          volumeMounts:
+            - name: {{ .Values.db.container.volumeMount.name }}
+              mountPath: {{ .Values.db.container.volumeMount.mountPath }}
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ .Values.db.container.volumeMount.name }}
+      spec:
+        accessModes: {{ .Values.db.container.volumeClaimTemplates.accessModes }}
+        resources:
+          requests:
+            storage: {{ .Values.db.container.volumeClaimTemplates.resources.requests.storage }}
