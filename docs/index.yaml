@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  user-crud:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2024-10-17T19:40:56.5021885+03:00"
+    description: A Helm chart for Kubernetes
+    digest: 9559815cb3f135ec15d9e257eef22ad405367fc756162d105f26c4d33e6fcba9
+    name: user-crud
+    type: application
+    urls:
+    - https://slavadenisenko.github.io/user-service/docs/user-crud-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-10-17T19:40:56.5021885+03:00"
